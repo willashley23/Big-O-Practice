@@ -158,18 +158,24 @@ class MinMaxStackQueue
   end
 
   def dequeue
+    clear_staging_stack if @stack2.empty?
+    @stack2.pop
+  end
+
+  def clear_staging_stack
     @stack2.push(@stack1.pop) until @stack1.empty?
-    val = @stack2.pop
-    @stack1.push(@stack2.pop) until @stack2.empty?
-    val
   end
 
   def find_min
-    @stack1.find_min
+    return @stack1.find_min if @stack2.empty?
+    return @stack2.find_min if @stack1.empty?
+    @stack1.find_min < @stack2.find_min ? @stack1.find_min : @stack2.find_min
   end
 
   def find_max
-    @stack1.find_max
+    return @stack1.find_max if @stack2.empty?
+    return @stack2.find_max if @stack1.empty?
+    @stack1.find_max > @stack2.find_max ? @stack1.find_max : @stack2.find_max
   end
 
   def size
